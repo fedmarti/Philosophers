@@ -6,9 +6,11 @@
 /*   By: fedmarti <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 21:56:19 by fedmarti          #+#    #+#             */
-/*   Updated: 2023/08/30 22:05:36 by fedmarti         ###   ########.fr       */
+/*   Updated: 2023/09/02 02:49:17 by fedmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <unistd.h>
 
 static int	correct_format(int argc, char **argv)
 {
@@ -16,7 +18,7 @@ static int	correct_format(int argc, char **argv)
 	int	j;
 
 	i = 1;
-	while (i <= argc)
+	while (i < argc)
 	{
 		j = 0;
 		while (argv[i][j])
@@ -32,14 +34,14 @@ static int	correct_format(int argc, char **argv)
 
 int	is_input_valid(int argc, char **argv)
 {
-	if (argc != 4 || argc != 5)
+	if (argc != 5 && argc != 6)
 	{
-		printf("wrong number of arguments\n");
+		write(1, "wrong number of arguments\n", 27);
 		return (0);
 	}
 	if (!correct_format(argc, argv))
 	{
-		printf("poorly formatted input\n");
+		write(1, "poorly formatted input\n", 24);
 		return (0);
 	}
 	return (1);
