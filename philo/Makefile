@@ -35,6 +35,7 @@ all: $(NAME)
 
 clean:
 	@rm -rf *.o
+	@rm -rf time/*.o
 	@echo ".o files removed"
 
 fclean: clean
