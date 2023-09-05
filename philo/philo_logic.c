@@ -6,11 +6,12 @@
 /*   By: fedmarti <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 21:47:02 by fedmarti          #+#    #+#             */
-/*   Updated: 2023/09/05 18:25:43 by fedmarti         ###   ########.fr       */
+/*   Updated: 2023/09/05 20:16:33 by fedmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <unistd.h>
 
 void	think_state(t_philo *philo);
 void	eat_state(t_philo *philo);
@@ -45,6 +46,8 @@ void	*philo_logic(void *arg)
 	philosopher = arg;
 	if (philosopher->data->n_philo == 1)
 		lonely_philo(philosopher);
+	if (philosopher->n % 2 == 0)
+		usleep(200);
 	while (philosopher->state != Dead && check_all_alive(philosopher->data))
 	{
 		if (philosopher->state == Eating)

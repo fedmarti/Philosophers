@@ -6,7 +6,7 @@
 /*   By: fedmarti <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 18:27:04 by fedmarti          #+#    #+#             */
-/*   Updated: 2023/09/05 20:04:45 by fedmarti         ###   ########.fr       */
+/*   Updated: 2023/09/05 20:12:53 by fedmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ void	think_state(t_philo *philo)
 {
 	struct timeval	time;
 
-	if (philo->n % 2)
-		usleep(200);
+	// if (philo->n % 2)
+	// 	usleep(150);
 	if (!fork_struggle(philo, philo->n - 1))
 		return ;
 	gettimeofday(&time, NULL);
