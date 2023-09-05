@@ -6,7 +6,7 @@
 /*   By: fedmarti <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 18:27:04 by fedmarti          #+#    #+#             */
-/*   Updated: 2023/09/03 02:37:09 by fedmarti         ###   ########.fr       */
+/*   Updated: 2023/09/05 20:04:45 by fedmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,44 @@ bool	death_check(t_philo *philo, struct timeval time)
 	return (false);
 }
 
+bool	fork_struggle(t_philo *philo, int fork_n)
+{
+	bool			fork;
+	struct timeval	time;
+
+	fork = false;
+	while (!fork)
+	{
+		gettimeofday(&time, NULL);
+		if (death_check(philo, time))
+			return (false);
+		fork = pick_up_fork(philo->data, fork_n);
+	}
+	return (true);
+}
+
 void	think_state(t_philo *philo)
+{
+	struct timeval	time;
+
+	if (philo->n % 2)
+		usleep(200);
+	if (!fork_struggle(philo, philo->n - 1))
+		return ;
+	gettimeofday(&time, NULL);
+	if (check_all_alive(philo->data))
+		p_log_state_change(philo->n, Taking_fork, \
+		philo->data->start_time, time);
+	if (!fork_struggle(philo, philo->n % philo->data->n_philo))
+		return ;
+	gettimeofday(&time, NULL);
+	if (check_all_alive(philo->data))
+		p_log_state_change(philo->n, Taking_fork, \
+		philo->data->start_time, time);
+	change_state(philo, Eating, time);
+}
+
+/*void	_think_state(t_philo *philo)
 {
 	int				*table;
 	pthread_mutex_t	*table_lock;
@@ -52,13 +89,13 @@ void	think_state(t_philo *philo)
 		table[philo->n - 1] = 0;
 		table[philo->n % philo->data->n_philo] = 0;
 		taken_both_forks = (philo->data->n_philo > 1);
-		p_log_state_change(philo->n, Taking_fork - (philo->data->n_philo > 1), \
+		p_log_state_change(philo->n, Taking_fork - (philo->data->n_philo > 1), 
 		philo->data->start_time, time);
 	}
 	pthread_mutex_unlock(table_lock);
 	if (taken_both_forks)
 		change_state(philo, Eating, time);
-}
+}*/
 
 // void	think_state(t_philo *philo)
 // {

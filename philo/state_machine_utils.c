@@ -6,7 +6,7 @@
 /*   By: fedmarti <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 18:26:28 by fedmarti          #+#    #+#             */
-/*   Updated: 2023/09/03 02:09:26 by fedmarti         ###   ########.fr       */
+/*   Updated: 2023/09/05 17:52:02 by fedmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,35 +16,35 @@
 #define _XOPEN_SOURCE 500
 #define _BSD_SOURCE
 
-// bool	pick_up_fork(t_data *data, int fork_n)
-// {
-// 	bool	success;
+bool	pick_up_fork(t_data *data, int fork_n)
+{
+	bool	success;
 
-// 	success = false;
-// 	pthread_mutex_lock(&data->fork_lock[fork_n]);
-// 	if (data->table[fork_n])
-// 	{
-// 		data->table[fork_n] = 0;
-// 		success = true;
-// 	}
-// 	pthread_mutex_unlock(&data->fork_lock[fork_n]);
-// 	return (success);
-// }
+	success = false;
+	pthread_mutex_lock(&data->fork_lock[fork_n]);
+	if (data->table[fork_n])
+	{
+		data->table[fork_n] = 0;
+		success = true;
+	}
+	pthread_mutex_unlock(&data->fork_lock[fork_n]);
+	return (success);
+}
 
-// bool	put_down_fork(t_data *data, int fork_n)
-// {
-// 	bool	success;
+bool	put_down_fork(t_data *data, int fork_n)
+{
+	bool	success;
 
-// 	success = false;
-// 	pthread_mutex_lock(&data->fork_lock[fork_n]);
-// 	if (!data->table[fork_n])
-// 	{
-// 		data->table[fork_n] = 1;
-// 		success = true;
-// 	}
-// 	pthread_mutex_unlock(&data->fork_lock[fork_n]);
-// 	return (success);
-// }
+	success = false;
+	pthread_mutex_lock(&data->fork_lock[fork_n]);
+	if (!data->table[fork_n])
+	{
+		data->table[fork_n] = 1;
+		success = true;
+	}
+	pthread_mutex_unlock(&data->fork_lock[fork_n]);
+	return (success);
+}
 
 void	change_state(t_philo *philo, enum e_philo_state new_state, \
 struct timeval time)
