@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   think_state.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fedmarti <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fedmarti <fedmarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 18:27:04 by fedmarti          #+#    #+#             */
-/*   Updated: 2023/09/05 20:12:53 by fedmarti         ###   ########.fr       */
+/*   Updated: 2023/09/13 17:14:54 by fedmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,16 +52,17 @@ bool	fork_struggle(t_philo *philo, int fork_n)
 void	think_state(t_philo *philo)
 {
 	struct timeval	time;
+	int				fork[2];
 
-	// if (philo->n % 2)
-	// 	usleep(150);
-	if (!fork_struggle(philo, philo->n - 1))
+	fork[0] = philo->n - 1;
+	fork[1] = philo->n % philo->data->n_philo;
+	if (!fork_struggle(philo, fork[!(philo->n & 1)]))
 		return ;
 	gettimeofday(&time, NULL);
 	if (check_all_alive(philo->data))
 		p_log_state_change(philo->n, Taking_fork, \
 		philo->data->start_time, time);
-	if (!fork_struggle(philo, philo->n % philo->data->n_philo))
+	if (!fork_struggle(philo, fork[(philo->n & 1)]))
 		return ;
 	gettimeofday(&time, NULL);
 	if (check_all_alive(philo->data))
