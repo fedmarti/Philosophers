@@ -6,7 +6,7 @@
 /*   By: fedmarti <fedmarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 18:27:04 by fedmarti          #+#    #+#             */
-/*   Updated: 2023/09/13 17:14:54 by fedmarti         ###   ########.fr       */
+/*   Updated: 2023/09/16 18:49:13 by fedmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,14 @@
 
 // int	right(int i, t_data *data);
 // int	left(int i, t_data *data);
+
+#include <stdio.h>
+// static inline void	odd_adjustment(bool *even)
+// {
+// 	even = true;
+// 	usleep(100);
+// 	printf("swapped\n");
+// }
 
 bool	death_check(t_philo *philo, struct timeval time)
 {
@@ -53,16 +61,23 @@ void	think_state(t_philo *philo)
 {
 	struct timeval	time;
 	int				fork[2];
+	bool			even;
 
 	fork[0] = philo->n - 1;
 	fork[1] = philo->n % philo->data->n_philo;
-	if (!fork_struggle(philo, fork[!(philo->n & 1)]))
+	even = !(philo->n & 1);
+	if (philo->data->n_philo & 1 \
+	&& philo->n == philo->data->n_philo && !(philo->meal_count & 1))
+		even = true;
+	if (even)
+		usleep(100);
+	if (!fork_struggle(philo, fork[even]))
 		return ;
 	gettimeofday(&time, NULL);
 	if (check_all_alive(philo->data))
 		p_log_state_change(philo->n, Taking_fork, \
 		philo->data->start_time, time);
-	if (!fork_struggle(philo, fork[(philo->n & 1)]))
+	if (!fork_struggle(philo, fork[!even]))
 		return ;
 	gettimeofday(&time, NULL);
 	if (check_all_alive(philo->data))
