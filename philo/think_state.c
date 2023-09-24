@@ -6,7 +6,7 @@
 /*   By: fedmarti <fedmarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 18:27:04 by fedmarti          #+#    #+#             */
-/*   Updated: 2023/09/16 18:49:13 by fedmarti         ###   ########.fr       */
+/*   Updated: 2023/09/24 20:23:14 by fedmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,12 @@ void	think_state(t_philo *philo)
 		return ;
 	gettimeofday(&time, NULL);
 	if (check_all_alive(philo->data))
-		p_log_state_change(philo->n, Taking_fork, \
-		philo->data->start_time, time);
+		p_log_state_change(philo, Taking_fork, time);
 	if (!fork_struggle(philo, fork[!even]))
 		return ;
 	gettimeofday(&time, NULL);
 	if (check_all_alive(philo->data))
-		p_log_state_change(philo->n, Taking_fork, \
-		philo->data->start_time, time);
+		p_log_state_change(philo, Taking_fork, time);
 	change_state(philo, Eating, time);
 }
 

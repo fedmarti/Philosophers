@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   state_machine_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fedmarti <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fedmarti <fedmarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 18:26:28 by fedmarti          #+#    #+#             */
-/*   Updated: 2023/09/05 17:52:02 by fedmarti         ###   ########.fr       */
+/*   Updated: 2023/09/24 21:22:54 by fedmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,16 @@ void	change_state(t_philo *philo, enum e_philo_state new_state, \
 struct timeval time)
 {
 	if (new_state != Dead && check_all_alive(philo->data))
-		p_log_state_change(philo->n, new_state, philo->data->start_time, time);
+		p_log_state_change(philo, new_state, time);
 	if (new_state == Eating)
 	{
 		philo->last_meal = time;
 		philo->meal_count++;
 		if (philo->meal_count == philo->data->times_philo_must_eat)
 		{
-			put_down_forks(philo);
+			usleep(philo->data->time_to_eat * MILLISEC);
+			put_down_fork(philo->data, philo->n - 1);
+			put_down_fork(philo->data, philo->n % philo->data->n_philo);
 			new_state = Dead;
 		}
 	}
@@ -65,8 +67,7 @@ struct timeval time)
 	{
 		pthread_mutex_lock(&philo->data->death_lock);
 		if (philo->data->all_alive)
-			p_log_state_change(philo->n, new_state, \
-			philo->data->start_time, time);
+			p_log_state_change(philo, new_state, time);
 		philo->data->all_alive = false;
 		pthread_mutex_unlock(&philo->data->death_lock);
 	}
@@ -74,18 +75,12 @@ struct timeval time)
 }
 
 void	usleep_untill(struct timeval tval, \
-struct timeval current_time, suseconds_t sleep_interval)
+struct timeval current_time)
 {
 	suseconds_t	delta;
 
 	delta = time_su_subtract(tval, current_time);
-	sleep_interval = 50 * (sleep_interval > 100) + (sleep_interval > 0);
-	(void)sleep_interval;
-	while (delta >= 1)
-	{
-		gettimeofday(&current_time, NULL);
-		delta = time_su_subtract(tval, current_time);
-	}
+	usleep(delta);
 }
 
 void	put_down_forks(t_philo *philo)

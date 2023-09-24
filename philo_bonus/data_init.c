@@ -6,7 +6,7 @@
 /*   By: fedmarti <fedmarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 02:11:25 by fedmarti          #+#    #+#             */
-/*   Updated: 2023/09/16 22:13:46 by fedmarti         ###   ########.fr       */
+/*   Updated: 2023/09/24 22:08:06 by fedmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,10 @@ t_data	data_init(int argc, char **argv)
 	}
 	if (!semaphores_init(&data))
 		return (data);
+	data.times_philo_must_eat = 1000;
 	if (argc == 6)
 		data.times_philo_must_eat = ft_atoi(argv[5]);
-	else
-		data.times_philo_must_eat = __INT_MAX__;
+	if (data.times_philo_must_eat == 0)
+		data_free(&data);
 	return (data);
 }

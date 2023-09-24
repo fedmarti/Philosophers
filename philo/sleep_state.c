@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sleep_state.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fedmarti <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fedmarti <fedmarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 18:25:15 by fedmarti          #+#    #+#             */
-/*   Updated: 2023/09/02 18:54:48 by fedmarti         ###   ########.fr       */
+/*   Updated: 2023/09/24 20:34:55 by fedmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	sleep_state(t_philo *philo)
 	suseconds_t			usleep_time;
 	enum e_philo_state	new_state;
 
-	gettimeofday(&time, NULL);
 	if (philo->data->time_to_eat + philo->data->time_to_sleep \
 	> philo->data->time_to_die)
 	{
@@ -30,9 +29,11 @@ void	sleep_state(t_philo *philo)
 	{
 		usleep_time = \
 		(philo->data->time_to_sleep + philo->data->time_to_eat) * MILLISEC;
+		usleep_time -= 100;
 		new_state = Thinking;
 	}
+	gettimeofday(&time, NULL);
 	new_time = timeval_add_su(philo->last_meal, usleep_time);
-	usleep_untill(new_time, time, usleep_time);
+	usleep_untill(new_time, time);
 	change_state(philo, new_state, new_time);
 }

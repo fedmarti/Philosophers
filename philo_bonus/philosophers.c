@@ -6,7 +6,7 @@
 /*   By: fedmarti <fedmarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 21:16:01 by fedmarti          #+#    #+#             */
-/*   Updated: 2023/09/16 22:15:39 by fedmarti         ###   ########.fr       */
+/*   Updated: 2023/09/20 19:07:58 by fedmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <signal.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 void	data_free(t_data *data)
 {
@@ -29,11 +31,11 @@ void	data_free(t_data *data)
 		data->philosophers = NULL;
 	}
 	if (data->all_full)
-		sem_unlink(FULL_SEM);
+		sem_close(data->all_full);
 	if (data->death)
-		sem_unlink(DEATH_SEM);
+		sem_close(data->death);
 	if (data->forks)
-		sem_unlink(FORKS_SEM);
+		sem_close(data->forks);
 	data->n_philo = 0;
 }
 
@@ -52,21 +54,42 @@ void	kill_all(t_data *data)
 void	*monitor_routine(void *d)
 {
 	t_data	*data;
-	int		i;
 
 	data = d;
-	i = data->n_philo;
-	while (i)
+	sem_wait(data->monitor_sem);
+	while (data->full_philos < data->n_philo)
 	{
+		sem_post(data->monitor_sem);
 		sem_wait(data->all_full);
-		i--;
+		sem_wait(data->monitor_sem);
+		data->full_philos++;
 	}
 	data->thread_terminated = true;
+	sem_post(data->monitor_sem);
 	sem_post(data->death);
 	return (NULL);
 }
 
 t_data	data_init(int argc, char **argv);
+
+void	program_exit(t_data *data, pthread_t *thread)
+{
+	sem_wait(data->death);
+	kill_all(data);
+	sem_wait(data->monitor_sem);
+	if (!data->thread_terminated)
+	{
+		while (data->full_philos < data->n_philo)
+		{
+			data->full_philos++;
+			sem_post(data->all_full);
+		}
+	}
+	sem_post(data->monitor_sem);
+	pthread_join(*thread, NULL);
+	sem_close(data->monitor_sem);
+	data_free(data);
+}
 
 int	main(int argc, char **argv)
 {
@@ -81,13 +104,15 @@ int	main(int argc, char **argv)
 	start_philos(&data);
 	if (!data.n_philo)
 		return (1);
+	data.monitor_sem = sem_open(MONITOR_SEM, O_CREAT, 777, 1);
+	if (!data.monitor_sem)
+	{
+		kill_all(&data);
+		data_free(&data);
+		return (1);
+	}
+	sem_unlink(MONITOR_SEM);
 	pthread_create(&meal_monitor, NULL, monitor_routine, &data);
-	sem_wait(data.death);
-	if (!data.thread_terminated)
-		pthread_detach(meal_monitor);
-	else
-		pthread_join(meal_monitor, NULL);
-	kill_all(&data);
-	data_free(&data);
+	program_exit(&data, &meal_monitor);
 	return (0);
 }

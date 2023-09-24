@@ -6,7 +6,7 @@
 /*   By: fedmarti <fedmarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 21:47:02 by fedmarti          #+#    #+#             */
-/*   Updated: 2023/09/16 22:15:48 by fedmarti         ###   ########.fr       */
+/*   Updated: 2023/09/24 23:26:51 by fedmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 void	think_state(t_philo *philo);
 void	eat_state(t_philo *philo);
 void	sleep_state(t_philo *philo);
+void	data_free(t_data *data);
 
 bool	death_check(t_philo *philo, struct timeval time)
 {
@@ -30,6 +31,8 @@ bool	death_check(t_philo *philo, struct timeval time)
 		return (true);
 	return (false);
 }
+
+#include <stdio.h>
 
 void	*death_routine(void *arg)
 {
@@ -43,10 +46,11 @@ void	*death_routine(void *arg)
 	{
 		sem_wait(philo->meal_time);
 		gettimeofday(&time, NULL);
-		alive = death_check(philo, time);
+		alive = !death_check(philo, time);
 		sem_post(philo->meal_time);
 	}
 	sem_post(philo->data->death);
+	p_log_state_change(philo->n, Dead, philo->data->start_time, time);
 	return (NULL);
 }
 
@@ -97,6 +101,8 @@ bool	philo_startup(t_philo *philo, pthread_t *monitor)
 	return (true);
 }
 
+#include <stdio.h>
+
 void	philo_logic(void *arg)
 {
 	t_philo		*philosopher;
@@ -105,8 +111,7 @@ void	philo_logic(void *arg)
 	philosopher = arg;
 	if (!philo_startup(philosopher, &death_monitor))
 		sem_post(philosopher->data->death);
-	if (philosopher->n % 2 == 0)
-		usleep(200);
+	usleep(200 * (philosopher->n > philosopher->data->n_philo / 2));
 	while (philosopher->state != Dead)
 	{
 		if (philosopher->state == Eating)
@@ -117,5 +122,6 @@ void	philo_logic(void *arg)
 			sleep_state(philosopher);
 	}
 	pthread_detach(death_monitor);
+	data_free(philosopher->data);
 	exit(0);
 }

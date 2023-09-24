@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   eat_state.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fedmarti <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fedmarti <fedmarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 12:41:46 by fedmarti          #+#    #+#             */
-/*   Updated: 2023/09/05 20:04:15 by fedmarti         ###   ########.fr       */
+/*   Updated: 2023/09/24 21:25:58 by fedmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,12 @@ void	eat_state(t_philo *philo)
 	else
 	{
 		usleep_time = philo->data->time_to_eat * MILLISEC;
+		usleep_time -= 100;
 		new_state = Sleeping;
 	}
 	new_time = timeval_add_su(philo->last_meal, usleep_time);
-	usleep_untill(new_time, time, usleep_time);
-	put_down_forks(philo);
+	usleep_untill(new_time, time);
+	put_down_fork(philo->data, philo->n - 1);
+	put_down_fork(philo->data, philo->n % philo->data->n_philo);
 	change_state(philo, new_state, new_time);
 }

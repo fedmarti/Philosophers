@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fedmarti <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fedmarti <fedmarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 21:29:14 by fedmarti          #+#    #+#             */
-/*   Updated: 2023/09/03 02:16:14 by fedmarti         ###   ########.fr       */
+/*   Updated: 2023/09/24 20:19:36 by fedmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_data {
 	struct timeval	start_time;
 	pthread_mutex_t	death_lock;
 	volatile bool	all_alive;
+	pthread_mutex_t	print_lock;
 }	t_data;
 
 int		is_input_valid(int argc, char **argv);
@@ -57,12 +58,11 @@ int		ft_atoi(const char *nptr);
 void	*ft_calloc(size_t nmemb, size_t size);
 void	start_philos(t_data *data);
 void	*philo_logic(void *arg);
-void	p_log_state_change(int philo_n, enum e_philo_state new_state, \
-		struct timeval start_time, struct timeval time);
+void	p_log_state_change(t_philo *philo, enum e_philo_state new_state, \
+struct timeval time);
 void	change_state(t_philo *philo, enum e_philo_state new_state, \
 struct timeval time);
-void	usleep_untill(struct timeval tval, struct timeval current_time, \
-		suseconds_t sleep_interval);
+void	usleep_untill(struct timeval tval, struct timeval current_time);
 void	put_down_forks(t_philo *philo);
 bool	pick_up_fork(t_data *data, int fork_n);
 bool	put_down_fork(t_data *data, int fork_n);

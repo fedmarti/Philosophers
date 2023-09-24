@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data_init.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fedmarti <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fedmarti <fedmarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 02:11:25 by fedmarti          #+#    #+#             */
-/*   Updated: 2023/09/03 02:20:33 by fedmarti         ###   ########.fr       */
+/*   Updated: 2023/09/24 20:20:08 by fedmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,11 @@ t_data	data_init(int argc, char **argv)
 	data.time_to_sleep = ft_atoi(argv[4]);
 	data.all_alive = true;
 	pthread_mutex_init(&data.death_lock, NULL);
+	pthread_mutex_init(&data.print_lock, NULL);
+	data.times_philo_must_eat = __INT_MAX__;
 	if (argc == 6)
 		data.times_philo_must_eat = ft_atoi(argv[5]);
-	else
-		data.times_philo_must_eat = __INT_MAX__;
+	if (data.times_philo_must_eat == 0)
+		data_free(&data);
 	return (data);
 }
