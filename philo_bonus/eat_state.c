@@ -6,14 +6,12 @@
 /*   By: fedmarti <fedmarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 12:41:46 by fedmarti          #+#    #+#             */
-/*   Updated: 2023/09/24 23:13:50 by fedmarti         ###   ########.fr       */
+/*   Updated: 2023/09/25 18:45:51 by fedmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include <unistd.h>
-
-#include <stdio.h>
 
 void	eat_state(t_philo *philo)
 {
@@ -31,4 +29,5 @@ void	eat_state(t_philo *philo)
 	change_state(philo, Sleeping, new_time);
 }
 
-	// p_log_state_change(philo->n, Putting_fork_down, philo->data->start_time, return_time_of_day());
+	// p_log_state_change(philo->n, Putting_fork_down, 
+	// philo->data->start_time, return_time_of_day());

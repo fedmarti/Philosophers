@@ -6,7 +6,7 @@
 /*   By: fedmarti <fedmarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 21:47:02 by fedmarti          #+#    #+#             */
-/*   Updated: 2023/09/24 23:26:51 by fedmarti         ###   ########.fr       */
+/*   Updated: 2023/09/25 18:46:09 by fedmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ bool	death_check(t_philo *philo, struct timeval time)
 		return (true);
 	return (false);
 }
-
-#include <stdio.h>
 
 void	*death_routine(void *arg)
 {
@@ -100,8 +98,6 @@ bool	philo_startup(t_philo *philo, pthread_t *monitor)
 	pthread_create(monitor, NULL, death_routine, philo);
 	return (true);
 }
-
-#include <stdio.h>
 
 void	philo_logic(void *arg)
 {

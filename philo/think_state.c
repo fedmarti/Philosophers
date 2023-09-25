@@ -6,7 +6,7 @@
 /*   By: fedmarti <fedmarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 18:27:04 by fedmarti          #+#    #+#             */
-/*   Updated: 2023/09/24 20:23:14 by fedmarti         ###   ########.fr       */
+/*   Updated: 2023/09/25 20:26:23 by fedmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 
 // int	right(int i, t_data *data);
 // int	left(int i, t_data *data);
-
-#include <stdio.h>
 // static inline void	odd_adjustment(bool *even)
 // {
 // 	even = true;
