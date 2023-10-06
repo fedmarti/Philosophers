@@ -6,7 +6,7 @@
 /*   By: fedmarti <fedmarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 18:27:04 by fedmarti          #+#    #+#             */
-/*   Updated: 2023/09/25 20:26:23 by fedmarti         ###   ########.fr       */
+/*   Updated: 2023/10/06 23:15:58 by fedmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ void	think_state(t_philo *philo)
 	int				fork[2];
 	bool			even;
 
-	fork[0] = philo->n - 1;
-	fork[1] = philo->n % philo->data->n_philo;
+	fork[1] = philo->n - 1;
+	fork[0] = philo->n % philo->data->n_philo;
 	even = !(philo->n & 1);
 	if (philo->data->n_philo & 1 \
 	&& philo->n == philo->data->n_philo && !(philo->meal_count & 1))
